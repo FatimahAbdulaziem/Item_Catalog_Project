@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+    
+        <title>Computers Catalog App</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+         
+    </head>
+
+    <body>
+         
+        <div class="container-fluid" style="background-color: DarkSlateGray; height: 150px; " >
+            <div class="container-fluid">
+                <div class="row" >
+                    <div class="col-sm-6">
+                        </br></br>
+                        <h1 style="font-family:Apple Chancery, cursive; font-style: italic; color:white"><b> Item Catalog </b></h1>
+                    </div>
+                    <div class="col-sm-6" style="text-align: right;">
+                        </br></br>
+                        <button class="btn btn-light btn-lg" id="logButton" onclick="RedirectToLoginlogout('{{Isloggedin}}')"></button>                         
+                    </div>                         
+                </div>
+            </div>
+        </div>
+              
+        <div class = 'flash'>
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        {% if message == "Failed to revoke token for you" %}
+                            <div class="alert alert-danger"> <strong> {{ message }} </strong> </div>
+                        {% elif message == "You are not authorized to edit the desired category" %}
+                            <div class="alert alert-danger"> <strong> {{ message }} </strong> </div>
+                        {% elif message == "You are not authorized to delete the desired category" %}
+                            <div class="alert alert-danger"> <strong> {{ message }} </strong> </div>
+                        {% else %}
+                            <div class="alert alert-success"> <strong> {{ message }} </strong> </div>
+                        {% endif %}
+                    {% endfor %}                       
+                {% endif %}                            
+            {% endwith %}
+        </div>
+
+        </br></br></br>
+
+        <div class="row">
+            <div class="col-sm-3" ></div>
+            <div class="col-sm-6" >
+            
+                {% if Isloggedin %}
+                    <a href='{{url_for('addNewCategory')}}'>Add New Category</a>&ensp;&ensp;| &ensp;&ensp;
+                    <script> document.getElementById("logButton").innerHTML = "logout"; </script>                  
+                {% else %}
+                    <a href='{{url_for('CategoriesJSON')}}'>Get categories as JSON</a>
+                    <script> document.getElementById("logButton").innerHTML = "login"; </script>
+                {% endif %}
+
+                <script>
+                    function RedirectToLoginlogout(x){
+                        if (x == "True"){
+                            window.location.href = "/gdisconnect";
+                        }else{
+                            window.location.href = "/login";}
+                    }
+
+                    var x =0;
+                </script>
+                
+                </br></br>
+
+                <div id="accordion">
+                    {% for Category in Categories %}
+                        <div class="card">
+                            <div class="card-header">
+                                <a class="card-link" data-toggle="collapse" href="#Category">
+                                    <B class="text-dark">{{Category.name}}</B>
+                                </a> &emsp;
+                                {% if Isloggedin %}
+                                    <a href='{{url_for('editCategory', category_id=Category.id)}}' >Edit</a>&ensp;|&ensp;
+                                    <a href='{{url_for('deleteCategory', category_id=Category.id)}}' >Delete</a> 
+                                {% endif %}
+                            </div>
+                            <div class="collapse" data-parent="#accordion">
+                                <div class="card-body">
+                                    {% for LastItem in LastItemList %}
+                                        {% if LastItem[2] == Category.id %}
+                                            <B class="text-info">Last Item: </B> {{LastItem[0]}}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </br>
+                                    <a href='{{url_for('showCategoryItems',category_id=Category.id)}}'>All Items</a></br>
+                                </div>                               
+                            </div>
+                        </div>
+                        <script>
+                            // This Code has been taken from: https://www.quora.com/How-do-I-add-an-HTML-element-ID-with-Javascript-and-classes
+                            document.getElementsByClassName("card-link")[x].setAttribute("href", "#Category"+x);
+                            document.getElementsByClassName("collapse")[x].setAttribute("id", "Category"+x);
+                            x++;                             
+                        </script>                            
+                    {% endfor %}
+                </div>
+                
+            </div>            
+            <div class="col-sm-3" ></div>            
+        </div>
+        
+    </body>
+</html>
+

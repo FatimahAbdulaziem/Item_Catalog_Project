@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+    
+        <title>Computers Catalog App</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+        
+    </head>
+    
+    <body>
+    
+        <script> var x = true; </script>
+        
+        <div class="container-fluid" style="background-color: DarkSlateGray; height: 150px; " >
+            <div class="container-fluid">
+                <div class="row" >
+                     <div class="col-sm-6">
+                        </br></br>
+                        <h1 style="font-family:Apple Chancery, cursive; font-style: italic; color:white"><b> Item Catalog </b></h1>
+                     </div>
+                     <div class="col-sm-6" style="text-align: right;">
+                        </br></br>
+                        <button class="btn btn-light btn-lg" id="logButton" onclick="RedirectTologout()"></button>
+                     </div>
+                </div>
+            <div>    
+        </div>
+        
+        <script>
+            document.getElementById("logButton").innerHTML = "logout";
+            function RedirectTologout(x){
+                window.location.href = "/gdisconnect";
+            }
+        </script>
+
+        </br></br></br></br>
+
+        <h1  class="text-info" style="text-align: center;">{{Category.name}}</h1>
+
+        </br></br>
+
+        <div class="row">
+            <div class="col-sm-5" ></div>
+            <div class="col-sm-2" >
+            
+                </br></br>
+                <form action="{{url_for('editItem',category_id=Category.id,item_id=Item.id)}}" method = 'POST' id="EditItemform">
+                    <fieldset>
+                        <legend> <i class="text-primary">Edit Item</i> </legend>
+                        <p ><font color="red" id="msg"></font></p>  
+                        Name:</br> <input type='text' size='30' name='Item_name' value='{{Item.name}}'></br></br>
+                        Computer Type:</br>
+                        <select name="Computer_Type">
+                            {% if Item.computer_type == 'Tablet' %}
+                                    <option value="Tablet" selected >Tablet</option>
+                                    <option value="Laptop" >Laptop</option>
+                                    <option value="2 in 1 Laptop" >2 in 1 Laptop</option>
+                                    <option value="Desktop Computer" >Desktop Computer</option>
+                            {% elif Item.computer_type == 'Laptop' %}
+                                    <option value="Tablet"  >Tablet</option>
+                                    <option value="Laptop" selected >Laptop</option>
+                                    <option value="2 in 1 Laptop" >2 in 1 Laptop</option>
+                                    <option value="Desktop Computer" >Desktop Computer</option>
+                            {% elif Item.computer_type == '2 in 1 Laptop' %}
+                                    <option value="Tablet"  >Tablet</option>
+                                    <option value="Laptop" >Laptop</option>
+                                    <option value="2 in 1 Laptop" selected >2 in 1 Laptop</option>
+                                    <option value="Desktop Computer" >Desktop Computer</option>
+                            {% else %}
+                                    <option value="Tablet"  >Tablet</option>
+                                    <option value="Laptop" >Laptop</option>
+                                    <option value="2 in 1 Laptop" >2 in 1 Laptop</option>
+                                    <option value="Desktop Computer" selected>Desktop Computer</option>
+                            {% endif %}
+                        </select></br></br>                    
+                        Description:</br> <textarea rows="4" cols="50" name="Description" form="EditItemform">{{Item.description}}</textarea></br></br>
+                        <input type='submit' name='submit' value='Edit' onclick="return validateForm()">
+                        <input type='submit' name='submit' value='Cancel'>
+                    </fieldset>
+                </form>
+                
+            </div>
+            <div class="col-sm-5" ></div>
+        </div>
+
+        <script>
+            function validateForm() {
+                var Item_Name = Number(document.forms["EditItemform"]["Item_name"].value);
+                var Computer_Type = document.forms["EditItemform"]["Computer_Type"].value;
+                var Description = document.forms["EditItemform"]["Description"].value;          
+                if (Item_Name=="" || Item_Name==" "){
+                    document.getElementById("msg").innerHTML = "Item Name field is required";
+                    return false;
+                } else if (Computer_Type==""){
+                    document.getElementById("msg").innerHTML = "select valid computer type";
+                    return false ;    
+                } else if (Description=="" || Description==" "){
+                    document.getElementById("msg").innerHTML = "Description field is required";
+                    return false;
+                } else {
+                    return true;
+                }       
+            }
+        </script>
+
+    </body>
+</html>

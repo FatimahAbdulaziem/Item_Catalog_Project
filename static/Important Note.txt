@@ -1,0 +1,1 @@
+There is no CSS in this folder because I used Bootstrap to design the interfaces, for that, I import its CSS by mentioning them  links in the headers of HTML pages directly 

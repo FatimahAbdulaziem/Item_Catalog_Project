@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+    
+        <title>Computers Catalog App</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+        <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+        <script src="//apis.google.com/js/platform.js?onload=start"> </script>
+        <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+         
+    </head>
+
+    <body>
+
+        <div class="container-fluid" style="background-color: DarkSlateGray; height: 150px; " >
+            <div class="container-fluid">
+                <div class="row" >
+                    <div class="col-sm-6">
+                        </br></br>
+                        <h1 style="font-family:Apple Chancery, cursive; font-style: italic; color:white"><b> Item Catalog </b></h1>
+                    </div>                       
+                </div>
+            </div>
+        </div>
+
+        </br></br></br></br>
+
+        <div class="row">
+            <div class="col" style="text-align: center;">
+                <h1 class="text-info">Login</h1>
+            </div>
+        </div>
+
+        </br></br></br></br>
+
+        <div class="row">
+            <div class="col" style="text-align: center;">
+                <!-- GOOGLE PLUS SIGN IN BUTTON-->
+                    <div id="signinButton" >
+                        <span class="g-signin"
+                            data-scope="openid email"
+                            data-clientid="153325127810-khg7gurnoafs1qb97csig7fn853efvee.apps.googleusercontent.com"
+                            data-redirecturi="postmessage"
+                            data-accesstype="offline"
+                            data-cookiepolicy="single_host_origin"
+                            data-callback="signInCallback"
+                            data-approvalprompt="force">
+                        </span>
+                    </div>
+                  <!--END GOOGLE PLUS SIGN IN BUTTON -->
+                <div id="result"></div>
+            </div>
+        </div>
+
+        <script>
+            function signInCallback(authResult) {
+              if (authResult['code']) {
+                // Hide the sign-in button now that the user is authorized
+                $('#signinButton').attr('style', 'display: none');
+                // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+                $.ajax({
+                  type: 'POST',
+                  url: '/gconnect?state={{STATE}}',
+                  processData: false,
+                  data: authResult['code'],
+                  contentType: 'application/octet-stream; charset=utf-8',
+                  success: function(result) {
+                    // Handle or verify the server response if necessary.
+                    if (result) {
+                      $('#result').html('Login Successful!</br>'+ result + '</br>Redirecting...')
+                     setTimeout(function() {
+                      window.location.href = "/computer_catalog";
+                     }, 4000);
+                      
+                  } else if (authResult['error']) {
+                console.log('There was an error: ' + authResult['error']);
+              } else {
+                    $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                     }
+                  }
+                  
+              }); } }
+        </script>
+
+    </body>
+
+</html>
